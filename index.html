@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>تحميل فيديوهات - Publer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #0a0a2a, #1a1a3a);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            background: white;
+            padding: 35px;
+            border-radius: 28px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        h1 i {
+            color: #ff0000;
+            margin-left: 10px;
+        }
+        .sub {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .input-group input {
+            flex: 1;
+            padding: 15px 20px;
+            border-radius: 60px;
+            border: 2px solid #eee;
+            font-size: 14px;
+            direction: ltr;
+            outline: none;
+        }
+        .input-group input:focus {
+            border-color: #ff0000;
+        }
+        .input-group button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .input-group button:hover {
+            background: #cc0000;
+        }
+        .new-search-btn {
+            background: #6c757d;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .platforms-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .platform-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f0f0f0;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+        }
+        .result {
+            margin-top: 25px;
+        }
+        .platform-card {
+            background: #f8f9fa;
+            border-radius: 20px;
+            padding: 20px;
+            border-right: 5px solid;
+        }
+        .platform-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .platform-icon {
+            font-size: 45px;
+        }
+        .platform-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .download-link {
+            display: block;
+            background: #25d366;
+            color: white;
+            padding: 14px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .download-link:hover {
+            background: #128c7e;
+            transform: scale(1.02);
+        }
+        .loader {
+            text-align: center;
+            padding: 30px;
+        }
+        .spinner {
+            width: 45px;
+            height: 45px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff0000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .detected-badge {
+            background: #e8f5e9;
+            padding: 8px;
+            border-radius: 30px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .note {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 16px;
+            font-size: 11px;
+            margin-top: 15px;
+            text-align: center;
+        }
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #888;
+        }
+        @media (max-width: 550px) {
+            .input-group {
+                flex-direction: column;
+            }
+            .platform-header {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1><i class="fab fa-youtube"></i> Publer Downloader</h1>
+    <div class="sub">تحميل فيديوهات من يوتيوب · فيسبوك · انستجرام · تيك توك · تويتر</div>
+
+    <div class="input-group">
+        <input type="text" id="url" placeholder="https://www.youtube.com/watch?v=..." dir="ltr">
+        <button onclick="download()"><i class="fas fa-download"></i> تحميل</button>
+    </div>
+
+    <button class="new-search-btn" onclick="resetSearch()">
+        <i class="fas fa-search"></i> بحث جديد
+    </button>
+
+    <div class="platforms-row">
+        <div class="platform-badge"><i class="fab fa-youtube" style="color:#ff0000;"></i> YouTube</div>
+        <div class="platform-badge"><i class="fab fa-facebook" style="color:#1877f2;"></i> Facebook</div>
+        <div class="platform-badge"><i class="fab fa-instagram" style="color:#dd2a7b;"></i> Instagram</div>
+        <div class="platform-badge"><i class="fab fa-tiktok"></i> TikTok</div>
+        <div class="platform-badge"><i class="fab fa-twitter" style="color:#1da1f2;"></i> Twitter</div>
+    </div>
+
+    <div class="result" id="result"></div>
+    <footer>⚡ بدون إعلانات - بدون تسجيل - جودة عالية</footer>
+</div>
+
+<script>
+const platformIcons = {
+    youtube: { name: "يوتيوب", icon: "fab fa-youtube", color: "#ff0000" },
+    facebook: { name: "فيسبوك", icon: "fab fa-facebook", color: "#1877f2" },
+    instagram: { name: "انستجرام", icon: "fab fa-instagram", color: "#dd2a7b" },
+    tiktok: { name: "تيك توك", icon: "fab fa-tiktok", color: "#000000" },
+    twitter: { name: "تويتر", icon: "fab fa-twitter", color: "#1da1f2" },
+    default: { name: "منصة أخرى", icon: "fas fa-globe", color: "#6c757d" }
+};
+
+function detectPlatform(url) {
+    if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+    if (url.includes('facebook.com') || url.includes('fb.watch')) return 'facebook';
+    if (url.includes('instagram.com')) return 'instagram';
+    if (url.includes('tiktok.com')) return 'tiktok';
+    if (url.includes('twitter.com') || url.includes('x.com')) return 'twitter';
+    return 'default';
+}
+
+function download() {
+    const url = document.getElementById("url").value.trim();
+    const result = document.getElementById("result");
+
+    if (!url) {
+        alert("⚠️ الرجاء إدخال رابط الفيديو");
+        return;
+    }
+    if (!url.startsWith("http")) {
+        alert("❌ الرابط غير صحيح");
+        return;
+    }
+
+    const platformKey = detectPlatform(url);
+    const platform = platformIcons[platformKey];
+    // استخدام Publer (أنظف موقع بدون إعلانات)
+    const downloadUrl = `https://publer.io/tools/youtube-downloader?url=${encodeURIComponent(url)}`;
+
+    result.innerHTML = `
+        <div class="loader">
+            <div class="spinner"></div>
+            <p>جاري تجهيز رابط التحميل...</p>
+            <p><i class="${platform.icon}"></i> ${platform.name}</p>
+        </div>
+    `;
+
+    setTimeout(() => {
+        result.innerHTML = `
+            <div class="detected-badge">
+                <i class="fas fa-check-circle"></i> ${platform.name}
+            </div>
+            <div class="platform-card" style="border-right-color: ${platform.color};">
+                <div class="platform-header">
+                    <i class="${platform.icon}" style="font-size: 45px; color: ${platform.color};"></i>
+                    <div class="platform-name">${platform.name}</div>
+                </div>
+                <a href="${downloadUrl}" target="_blank" class="download-link" style="background: ${platform.color};">
+                    <i class="fas fa-download"></i> تحميل من Publer
+                </a>
+            </div>
+            <div class="note">
+                <i class="fas fa-info-circle"></i> Publer: بدون إعلانات - بدون تسجيل - جودة عالية
+            </div>
+        `;
+    }, 500);
+}
+
+function resetSearch() {
+    document.getElementById("url").value = "";
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("url").focus();
+}
+</script>
+
+</body>
+</html>
